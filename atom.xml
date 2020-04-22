@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://armslave7.github.io</id>
+    <title>songt&apos;s blog</title>
+    <updated>2020-04-22T12:06:46.315Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://armslave7.github.io"/>
+    <link rel="self" href="https://armslave7.github.io/atom.xml"/>
+    <subtitle>ING</subtitle>
+    <logo>https://armslave7.github.io/images/avatar.png</logo>
+    <icon>https://armslave7.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[我的山谷]]></title>
+        <id>https://armslave7.github.io/post/wo-de-shan-gu/</id>
+        <link href="https://armslave7.github.io/post/wo-de-shan-gu/">
+        </link>
+        <updated>2020-04-22T12:03:17.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="芝兰生于幽谷不以无人而不芳君子修道立德不以穷困而变节">芝兰生于幽谷，不以无人而不芳，君子修道立德，不以穷困而变节</h1>
+]]></content>
+    </entry>
+</feed>
