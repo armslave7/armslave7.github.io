@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-04-26T06:51:47.517Z</updated>
+    <updated>2020-04-26T06:53:26.669Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -26,7 +26,8 @@
         <link href="https://armslave7.github.io/post/wo-de-shan-gu/">
         </link>
         <updated>2020-04-22T12:03:17.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="芝兰生于幽谷不以无人而不芳君子修道立德不以穷困而变节">芝兰生于幽谷，不以无人而不芳，君子修道立德，不以穷困而变节</h1>
+        <content type="html"><![CDATA[<h1 id="芝兰生于幽谷">芝兰生于幽谷</h1>
+<h1 id="不以无人而不芳">不以无人而不芳</h1>
 ]]></content>
     </entry>
 </feed>
