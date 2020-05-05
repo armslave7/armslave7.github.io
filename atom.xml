@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-05-05T08:43:01.379Z</updated>
+    <updated>2020-05-05T08:54:19.039Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -10,6 +10,41 @@
     <logo>https://armslave7.github.io/images/avatar.png</logo>
     <icon>https://armslave7.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[c++ string format]]></title>
+        <id>https://armslave7.github.io/post/c-string-format/</id>
+        <link href="https://armslave7.github.io/post/c-string-format/">
+        </link>
+        <updated>2020-05-05T08:43:08.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="c11格式化string">c++(11)格式化string</h2>
+<p>在编写网络通信程序时遇到传递固定长度的字节问题，需要格式化字符串，c++的string类并没有提供类似的方法</p>
+<pre><code class="language-c++">#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;stdexcept&gt;
+template&lt;typename ... Args&gt;
+std::string string_format( const std::string&amp; format, Args ... args )
+{
+    size_t size = snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
+    if( size &lt;= 0 ){ throw std::runtime_error( &quot;Error during formatting.&quot; ); }
+    std::unique_ptr&lt;char[]&gt; buf( new char[ size ] ); 
+    snprintf( buf.get(), size, format.c_str(), args ... );
+    return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+}
+// Testing
+#include &lt;iostream&gt;
+int main() {
+	//test the function here
+	std::cout &lt;&lt; string_format(&quot;%d&quot;, 202412);
+	//&lt;test&gt;
+	return 0;
+}
+</code></pre>
+<p>例如以8为输出一个整数（暂时不考虑大于8为的情况）</p>
+<pre><code class="language-c++">string data = string_format(&quot;%8d&quot;,123);
+</code></pre>
+<p>该方法<a href="https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf">来源</a>，并提到在c++20中可以使用std::format，与python中操作方法类似。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[学习asio]]></title>
         <id>https://armslave7.github.io/post/xue-xi-asio/</id>

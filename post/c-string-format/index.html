@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>我的山谷 | songt&#39;s blog</title>
+<title>c++ string format | songt&#39;s blog</title>
 <meta name="description" content="ING" />
 <link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1588668856321">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,28 +73,60 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              我的山谷
+              c++ string format
             </h2>
             <div class="post-info">
               <span>
-                2020-04-22
+                2020-05-05
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
+              
+                <a href="https://armslave7.github.io/tag/RQiP1kny-/" class="post-tag">
+                  # c++
+                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="芝兰生于幽谷">芝兰生于幽谷</h1>
-<h1 id="不以无人而不芳">不以无人而不芳</h1>
+                <h2 id="c11格式化string">c++(11)格式化string</h2>
+<p>在编写网络通信程序时遇到传递固定长度的字节问题，需要格式化字符串，c++的string类并没有提供类似的方法</p>
+<pre><code class="language-c++">#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;stdexcept&gt;
+template&lt;typename ... Args&gt;
+std::string string_format( const std::string&amp; format, Args ... args )
+{
+    size_t size = snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
+    if( size &lt;= 0 ){ throw std::runtime_error( &quot;Error during formatting.&quot; ); }
+    std::unique_ptr&lt;char[]&gt; buf( new char[ size ] ); 
+    snprintf( buf.get(), size, format.c_str(), args ... );
+    return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+}
+// Testing
+#include &lt;iostream&gt;
+int main() {
+	//test the function here
+	std::cout &lt;&lt; string_format(&quot;%d&quot;, 202412);
+	//&lt;test&gt;
+	return 0;
+}
+</code></pre>
+<p>例如以8为输出一个整数（暂时不考虑大于8为的情况）</p>
+<pre><code class="language-c++">string data = string_format(&quot;%8d&quot;,123);
+</code></pre>
+<p>该方法<a href="https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf">来源</a>，并提到在c++20中可以使用std::format，与python中操作方法类似。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E8%8A%9D%E5%85%B0%E7%94%9F%E4%BA%8E%E5%B9%BD%E8%B0%B7">芝兰生于幽谷</a></li>
-<li><a href="#%E4%B8%8D%E4%BB%A5%E6%97%A0%E4%BA%BA%E8%80%8C%E4%B8%8D%E8%8A%B3">不以无人而不芳</a></li>
+<li>
+<ul>
+<li><a href="#c11%E6%A0%BC%E5%BC%8F%E5%8C%96string">c++(11)格式化string</a></li>
+</ul>
+</li>
 </ul>
 
               </div>
@@ -102,6 +134,15 @@
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://armslave7.github.io/post/xue-xi-asio/">
+              <h3 class="post-title">
+                学习asio
+              </h3>
+            </a>
+          </div>
         
 
         
