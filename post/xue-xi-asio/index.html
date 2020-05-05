@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>学习asio | songt&#39;s blog</title>
 <meta name="description" content="ING" />
-<link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1588667550611">
+<link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1588668170714">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://armslave7.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://armslave7.github.io">
-  <img class="avatar" src="https://armslave7.github.io/images/avatar.png?v=1588667550611" alt="">
+  <img class="avatar" src="https://armslave7.github.io/images/avatar.png?v=1588668170714" alt="">
   </a>
   <h1 class="site-title">
     songt&#39;s blog
@@ -80,7 +80,7 @@
                 2020-05-05
               </span>
               <span>
-                3 min read
+                4 min read
               </span>
               
                 <a href="https://armslave7.github.io/tag/U_qsYDheL/" class="post-tag">
@@ -192,6 +192,20 @@
   }
 }
 </code></pre>
+<h2 id="windows下编译出现winsockh-has-already-been-included">windows下编译出现&quot;WinSock.h has already been included&quot;</h2>
+<p>使用asio库时，编译提示错误：<br>
+fatal error C1189: #error :  WinSock.h has already been included</p>
+<blockquote>
+<pre><code>原来是定义了_WINSOCKAPI_，但没有定义_WINSOCK2API_
+那哪里定义了_WINSOCKAPI_呢？
+后来在网上查了下，原来是我包含了Windows.h头文件，而Windows.h头文件又包含了WinSock.h这个老东西
+知道原因就简单了，试了下，方法有三种可解决此错误：
+1、在包含Windows.h前定义宏WIN32_LEAN_AND_MEAN，就OK了（WIN32_LEAN_AND_MEAN表示不包含一些极少使用和偏门的资料）
+2、在包含Windows.h前包含winsock2.h
+3、在包含Windows.h前包含asio.hpp
+</code></pre>
+</blockquote>
+<p>资料<a href="https://blog.csdn.net/gzlyb/java/article/details/5870326">链接</a></p>
 
               </div>
               <div class="toc-container">
@@ -200,6 +214,7 @@
 <ul>
 <li><a href="#socket%E5%AF%B9%E8%B1%A1%E4%BF%9D%E5%AD%98%E5%88%B0%E7%B1%BB%E4%B8%AD">socket对象保存到类中</a></li>
 <li><a href="#%E5%90%8C%E6%AD%A5%E9%80%9A%E4%BF%A1%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%BC%96%E7%A8%8B">同步通信服务端编程</a></li>
+<li><a href="#windows%E4%B8%8B%E7%BC%96%E8%AF%91%E5%87%BA%E7%8E%B0winsockh-has-already-been-included">windows下编译出现&quot;WinSock.h has already been included&quot;</a></li>
 </ul>
 </li>
 </ul>
