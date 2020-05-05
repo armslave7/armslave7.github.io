@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-04-30T16:05:45.688Z</updated>
+    <updated>2020-05-05T08:32:32.410Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -10,6 +10,111 @@
     <logo>https://armslave7.github.io/images/avatar.png</logo>
     <icon>https://armslave7.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[学习asio]]></title>
+        <id>https://armslave7.github.io/post/xue-xi-asio/</id>
+        <link href="https://armslave7.github.io/post/xue-xi-asio/">
+        </link>
+        <updated>2020-05-04T18:36:17.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="socket对象保存到类中">socket对象保存到类中</h2>
+<p>如果要将asio::ip::tcp::socket对象作为类的成员变量保存当前连接，需要注意socket只能有一份实例，因为不能同时存在两份相同的socket对相同的流进行读写，所以类中保存的可以是socket的指针，或者引用，或者使用std::move方法将原作用域的socket引入类中，在这些方法中均需要考虑socket是否还有效。</p>
+<ul>
+<li>使用引用<br>
+如下Session类所示</li>
+</ul>
+<pre><code class="language-c++">class Session
+{
+  private:
+    tcp::socket &amp;socket_;
+  public:
+  //socket作为参数，不能直接传递（不能通过编译）
+  //类中的引用变量, 必须要在初始化列表中进行初始化
+    Session(tcp::socket &amp;socket)
+        : socket_(socket)
+    { this-&gt;process();  }
+    // 业务逻辑代码
+    int process();
+};
+</code></pre>
+<ul>
+<li>使用指针</li>
+</ul>
+<pre><code class="language-c++">class Session
+{
+  private:
+    tcp::socket* p_socket_;
+  public:
+  //初始化指针，传递进来的socket同样是引用，并且需要保证socket在使用的时候有效
+    Session(tcp::socket &amp;socket)
+    {
+        this-&gt;p_socket_ = &amp;socket;
+    }
+};
+</code></pre>
+<ul>
+<li>使用std::move</li>
+</ul>
+<pre><code class="language-c++">class Session
+{
+  private:
+    tcp::socket socket_;
+  public:
+  // 形参为socket，在实例化调用构造函数时，调用方式为Session(std::move(socket))，此时调用次函数的范围内socket不再有效，socket到了该类中。
+    Session(tcp::socket socket)
+        : socket_(std::move(socket))
+        {}
+};
+</code></pre>
+<h2 id="同步通信服务端编程">同步通信服务端编程</h2>
+<p>asio的示例代码echo很好得演示了这个过程</p>
+<pre><code class="language-c++">void server(asio::io_context&amp; io_context, unsigned short port)
+{
+  tcp::acceptor a(io_context, tcp::endpoint(tcp::v4(), port));
+  for (;;)
+  {
+    std::thread(session, a.accept()).detach();
+  }
+}
+</code></pre>
+<p>server函数作为接收器，不停接收来自客户端的链接，并阻塞在a.accept()这个地方，如果有链接，该函数返回socket链接对象，然后调用thread函数，以session函数创建并启动新线程，该线程调用detach方法与原线程分离，接收器继续等待链接。</p>
+<p>示例代码中session函数中包含了业务逻辑</p>
+<pre><code class="language-c++">void session(tcp::socket sock)
+{
+  try
+  {
+    for (;;)
+    {
+      char data[max_length];
+      asio::error_code error;
+      size_t length = sock.read_some(asio::buffer(data), error);
+      if (error == asio::error::eof)
+        break; // Connection closed cleanly by peer.
+      else if (error)
+        throw asio::system_error(error); // Some other error.
+      asio::write(sock, asio::buffer(data, length));
+    }
+  }
+  catch (std::exception&amp; e)
+  {
+    std::cerr &lt;&lt; &quot;Exception in thread: &quot; &lt;&lt; e.what() &lt;&lt; &quot;\n&quot;;
+  }
+}
+</code></pre>
+<p>也可以使用前面创建的Session类进行操作</p>
+<pre><code class="language-c++">void session(tcp::socket sock)
+{
+  try
+  {
+    auto p = make_shared&lt;Session&gt;(sock);
+  }
+  catch (std::exception&amp; e)
+  {
+    std::cerr &lt;&lt; &quot;Exception in thread: &quot; &lt;&lt; e.what() &lt;&lt; &quot;\n&quot;;
+  }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[vscode相关]]></title>
         <id>https://armslave7.github.io/post/vscode-xiang-guan/</id>
