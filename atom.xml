@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-05-16T15:35:31.987Z</updated>
+    <updated>2020-05-16T15:36:54.074Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -71,7 +71,7 @@ unset env
         <link href="https://armslave7.github.io/post/c-string/">
         </link>
         <updated>2020-05-16T15:29:29.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="使用regex分割">使用regex分割</h1>
+        <content type="html"><![CDATA[<h2 id="使用regex分割">使用regex分割</h2>
 <p>类似python中split的功能使用正则表达式对字符串进行分割，但当前(c++11,c++14,c++17)并没有提供相应的分割功能。<br>
 在stackoverflow中也有<a href="https://stackoverflow.com/questions/16749069/c-split-string-by-regex/16752826">讨论</a>，并给出了一些解决方案，但是在<a href="http://www.cplusplus.com/reference/regex/regex_token_iterator/regex_token_iterator/">cppreference</a>中给出的方案应该是最好的，即使用<code>regex_token_iterator&lt;std::string::iterator&gt;</code>进行迭代。<br>
 具体代码如下：</p>
