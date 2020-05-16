@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>我的山谷 | songt&#39;s blog</title>
+<title>C++ string | songt&#39;s blog</title>
 <meta name="description" content="ING" />
 <link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1589643166582">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,28 +73,84 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              我的山谷
+              C++ string
             </h2>
             <div class="post-info">
               <span>
-                2020-04-22
+                2020-05-16
               </span>
               <span>
-                1 min read
+                3 min read
               </span>
+              
+                <a href="https://armslave7.github.io/tag/RQiP1kny-/" class="post-tag">
+                  # c++
+                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="芝兰生于幽谷">芝兰生于幽谷</h1>
-<h1 id="不以无人而不芳">不以无人而不芳</h1>
+                <h1 id="使用regex分割">使用regex分割</h1>
+<p>类似python中split的功能使用正则表达式对字符串进行分割，但当前(c++11,c++14,c++17)并没有提供相应的分割功能。<br>
+在stackoverflow中也有<a href="https://stackoverflow.com/questions/16749069/c-split-string-by-regex/16752826">讨论</a>，并给出了一些解决方案，但是在<a href="http://www.cplusplus.com/reference/regex/regex_token_iterator/regex_token_iterator/">cppreference</a>中给出的方案应该是最好的，即使用<code>regex_token_iterator&lt;std::string::iterator&gt;</code>进行迭代。<br>
+具体代码如下：</p>
+<pre><code class="language-c++">// regex_token_iterator example
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;regex&gt;
+
+int main ()
+{
+  std::string s (&quot;this subject has a submarine as a subsequence&quot;);
+  std::regex e (&quot;\\b(sub)([^ ]*)&quot;);   // matches words beginning by &quot;sub&quot;
+
+  // default constructor = end-of-sequence:
+  std::regex_token_iterator&lt;std::string::iterator&gt; rend;
+
+  std::cout &lt;&lt; &quot;entire matches:&quot;; 
+  std::regex_token_iterator&lt;std::string::iterator&gt; a ( s.begin(), s.end(), e );
+  while (a!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *a++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;2nd submatches:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; b ( s.begin(), s.end(), e, 2 );
+  while (b!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *b++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;1st and 2nd submatches:&quot;;
+  int submatches[] = { 1, 2 };
+  std::regex_token_iterator&lt;std::string::iterator&gt; c ( s.begin(), s.end(), e, submatches );
+  while (c!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *c++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;matches as splitters:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; d ( s.begin(), s.end(), e, -1 );
+  while (d!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *d++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</code></pre>
+<p>注意<code>regex_token_iterator&lt;std::string::iterator&gt;</code>构造函数的第三个参数的意义。<br>
+output</p>
+<pre><code>entire amtches: [subject] [submarine] [subsequence]
+2nd submatches: [ject] [marine] [sequence]
+1st and 2nd submatches: [sub] [ject] [sub] [marine] [sub] [sequence]
+matches as splitters: [this ] [ has a ] [ as a ]
+</code></pre>
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E8%8A%9D%E5%85%B0%E7%94%9F%E4%BA%8E%E5%B9%BD%E8%B0%B7">芝兰生于幽谷</a></li>
-<li><a href="#%E4%B8%8D%E4%BB%A5%E6%97%A0%E4%BA%BA%E8%80%8C%E4%B8%8D%E8%8A%B3">不以无人而不芳</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8regex%E5%88%86%E5%89%B2">使用regex分割</a></li>
 </ul>
 
               </div>
@@ -102,6 +158,15 @@
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://armslave7.github.io/post/c-string-format/">
+              <h3 class="post-title">
+                c++ string format
+              </h3>
+            </a>
+          </div>
         
 
         

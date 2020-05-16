@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>我的山谷 | songt&#39;s blog</title>
+<title>window下ssh以及vscode-remotessh | songt&#39;s blog</title>
 <meta name="description" content="ING" />
 <link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1589643166582">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,28 +73,72 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              我的山谷
+              window下ssh以及vscode-remotessh
             </h2>
             <div class="post-info">
               <span>
-                2020-04-22
+                2020-05-16
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
+              
+                <a href="https://armslave7.github.io/tag/qgjvMU-u5/" class="post-tag">
+                  # tools
+                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="芝兰生于幽谷">芝兰生于幽谷</h1>
-<h1 id="不以无人而不芳">不以无人而不芳</h1>
+                <h1 id="mingw中ssh相关问题">mingw中ssh相关问题</h1>
+<h2 id="mingw-ssh-add出错">mingw ssh-add出错</h2>
+<p>提示：Could not open a connection to your authentication agent<br>
+参考stackoverflow中的<a href="https://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent">问题1</a>和<a href="https://stackoverflow.com/questions/24154816/git-bash-could-not-open-a-connection-to-your-authentication-agent/33697306">问题2</a><br>
+简单来说只需要kill前面的sshd进程，然后<code>eval `ssh-agent.exe`</code>然后ssh-add即可（此处为mingw中的方法）<br>
+让gitbash每次启动自动检查并允许sshd，stackoverflow中也有<a href="https://stackoverflow.com/questions/18404272/running-ssh-agent-when-starting-git-bash-on-windows">讨论</a>，并且github给出了一个较好的解决方案<a href="https://help.github.com/en/github/authenticating-to-github/working-with-ssh-key-passphrases#auto-launching-ssh-agent-on-git-for-windows">auto-launching-ssh-agent</a>。<br>
+只需将下面代码保存到<sub>/.bashrc_profile或</sub>/.profile即可（win，mingw）。</p>
+<pre><code class="language-bash">env=~/.ssh/agent.env
+
+agent_load_env () { test -f &quot;$env&quot; &amp;&amp; . &quot;$env&quot; &gt;| /dev/null ; }
+
+agent_start () {
+    (umask 077; ssh-agent &gt;| &quot;$env&quot;)
+    . &quot;$env&quot; &gt;| /dev/null ; }
+
+agent_load_env
+
+# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+agent_run_state=$(ssh-add -l &gt;| /dev/null 2&gt;&amp;1; echo $?)
+
+if [ ! &quot;$SSH_AUTH_SOCK&quot; ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add
+elif [ &quot;$SSH_AUTH_SOCK&quot; ] &amp;&amp; [ $agent_run_state = 1 ]; then
+    ssh-add
+fi
+
+unset env
+</code></pre>
+<h2 id="上传密钥">上传密钥</h2>
+<p>可以通过ssh-copy-id上传公密到需要授权的服务器</p>
+<pre><code>ssh-copy-id -i ~/.ssh/mykey user@host
+</code></pre>
+<p><code>~/.ssh/mykey</code>可以不用加后缀，会自动识别并上传公密</p>
+<h2 id="vscode-remotessh弹出an-ssh-installation-couldnt-be-found">vscode-remotessh弹出An SSH installation couldn't be found.</h2>
+<p>本质问题是插件没有找到可用的ssh，只需设置插件的Remote.SSH.Path即可。<br>
+例如本机上为<code>D:/tools/Git/usr/bin/ssh.exe</code>。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E8%8A%9D%E5%85%B0%E7%94%9F%E4%BA%8E%E5%B9%BD%E8%B0%B7">芝兰生于幽谷</a></li>
-<li><a href="#%E4%B8%8D%E4%BB%A5%E6%97%A0%E4%BA%BA%E8%80%8C%E4%B8%8D%E8%8A%B3">不以无人而不芳</a></li>
+<li><a href="#mingw%E4%B8%ADssh%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98">mingw中ssh相关问题</a>
+<ul>
+<li><a href="#mingw-ssh-add%E5%87%BA%E9%94%99">mingw ssh-add出错</a></li>
+<li><a href="#%E4%B8%8A%E4%BC%A0%E5%AF%86%E9%92%A5">上传密钥</a></li>
+<li><a href="#vscode-remotessh%E5%BC%B9%E5%87%BAan-ssh-installation-couldnt-be-found">vscode-remotessh弹出An SSH installation couldn't be found.</a></li>
+</ul>
+</li>
 </ul>
 
               </div>
@@ -102,6 +146,15 @@
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://armslave7.github.io/post/c-string/">
+              <h3 class="post-title">
+                C++ string
+              </h3>
+            </a>
+          </div>
         
 
         

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-05-05T08:54:19.039Z</updated>
+    <updated>2020-05-16T15:32:57.580Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -10,6 +10,173 @@
     <logo>https://armslave7.github.io/images/avatar.png</logo>
     <icon>https://armslave7.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[learn git]]></title>
+        <id>https://armslave7.github.io/post/learn-git/</id>
+        <link href="https://armslave7.github.io/post/learn-git/">
+        </link>
+        <updated>2020-05-16T15:31:48.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="拉取指定版本代码">拉取指定版本代码</h1>
+<p>git clone --branch version.num repo.location</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[window下ssh以及vscode-remotessh]]></title>
+        <id>https://armslave7.github.io/post/window-xia-ssh-yi-ji-vscode-remotessh/</id>
+        <link href="https://armslave7.github.io/post/window-xia-ssh-yi-ji-vscode-remotessh/">
+        </link>
+        <updated>2020-05-16T15:30:33.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="mingw中ssh相关问题">mingw中ssh相关问题</h1>
+<h2 id="mingw-ssh-add出错">mingw ssh-add出错</h2>
+<p>提示：Could not open a connection to your authentication agent<br>
+参考stackoverflow中的<a href="https://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent">问题1</a>和<a href="https://stackoverflow.com/questions/24154816/git-bash-could-not-open-a-connection-to-your-authentication-agent/33697306">问题2</a><br>
+简单来说只需要kill前面的sshd进程，然后<code>eval `ssh-agent.exe`</code>然后ssh-add即可（此处为mingw中的方法）<br>
+让gitbash每次启动自动检查并允许sshd，stackoverflow中也有<a href="https://stackoverflow.com/questions/18404272/running-ssh-agent-when-starting-git-bash-on-windows">讨论</a>，并且github给出了一个较好的解决方案<a href="https://help.github.com/en/github/authenticating-to-github/working-with-ssh-key-passphrases#auto-launching-ssh-agent-on-git-for-windows">auto-launching-ssh-agent</a>。<br>
+只需将下面代码保存到<sub>/.bashrc_profile或</sub>/.profile即可（win，mingw）。</p>
+<pre><code class="language-bash">env=~/.ssh/agent.env
+
+agent_load_env () { test -f &quot;$env&quot; &amp;&amp; . &quot;$env&quot; &gt;| /dev/null ; }
+
+agent_start () {
+    (umask 077; ssh-agent &gt;| &quot;$env&quot;)
+    . &quot;$env&quot; &gt;| /dev/null ; }
+
+agent_load_env
+
+# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+agent_run_state=$(ssh-add -l &gt;| /dev/null 2&gt;&amp;1; echo $?)
+
+if [ ! &quot;$SSH_AUTH_SOCK&quot; ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add
+elif [ &quot;$SSH_AUTH_SOCK&quot; ] &amp;&amp; [ $agent_run_state = 1 ]; then
+    ssh-add
+fi
+
+unset env
+</code></pre>
+<h2 id="上传密钥">上传密钥</h2>
+<p>可以通过ssh-copy-id上传公密到需要授权的服务器</p>
+<pre><code>ssh-copy-id -i ~/.ssh/mykey user@host
+</code></pre>
+<p><code>~/.ssh/mykey</code>可以不用加后缀，会自动识别并上传公密</p>
+<h2 id="vscode-remotessh弹出an-ssh-installation-couldnt-be-found">vscode-remotessh弹出An SSH installation couldn't be found.</h2>
+<p>本质问题是插件没有找到可用的ssh，只需设置插件的Remote.SSH.Path即可。<br>
+例如本机上为<code>D:/tools/Git/usr/bin/ssh.exe</code>。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[C++ string]]></title>
+        <id>https://armslave7.github.io/post/c-string/</id>
+        <link href="https://armslave7.github.io/post/c-string/">
+        </link>
+        <updated>2020-05-16T15:29:29.000Z</updated>
+        <summary type="html"><![CDATA[<h1 id="使用regex分割">使用regex分割</h1>
+<p>类似python中split的功能使用正则表达式对字符串进行分割，但当前(c++11,c++14,c++17)并没有提供相应的分割功能。<br>
+在stackoverflow中也有<a href="https://stackoverflow.com/questions/16749069/c-split-string-by-regex/16752826">讨论</a>，并给出了一些解决方案，但是在<a href="http://www.cplusplus.com/reference/regex/regex_token_iterator/regex_token_iterator/">cppreference</a>中给出的方案应该是最好的，即使用<code>regex_token_iterator&lt;std::string::iterator&gt;</code>进行迭代。<br>
+具体代码如下：</p>
+<pre><code class="language-c++">// regex_token_iterator example
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;regex&gt;
+
+int main ()
+{
+  std::string s (&quot;this subject has a submarine as a subsequence&quot;);
+  std::regex e (&quot;\\b(sub)([^ ]*)&quot;);   // matches words beginning by &quot;sub&quot;
+
+  // default constructor = end-of-sequence:
+  std::regex_token_iterator&lt;std::string::iterator&gt; rend;
+
+  std::cout &lt;&lt; &quot;entire matches:&quot;; 
+  std::regex_token_iterator&lt;std::string::iterator&gt; a ( s.begin(), s.end(), e );
+  while (a!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *a++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;2nd submatches:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; b ( s.begin(), s.end(), e, 2 );
+  while (b!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *b++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;1st and 2nd submatches:&quot;;
+  int submatches[] = { 1, 2 };
+  std::regex_token_iterator&lt;std::string::iterator&gt; c ( s.begin(), s.end(), e, submatches );
+  while (c!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *c++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;matches as splitters:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; d ( s.begin(), s.end(), e, -1 );
+  while (d!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *d++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</code></pre>
+<p>注意<code>regex_token_iterator&lt;std::string::iterator&gt;</code>构造函数的第三个参数的意义。<br>
+output</p>
+<pre><code>entire amtches: [subject] [submarine] [subsequence]
+2nd submatches: [ject] [marine] [sequence]
+1st and 2nd submatches: [sub] [ject] [sub] [marine] [sub] [sequence]
+matches as splitters: [this ] [ has a ] [ as a ]
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<h1 id="使用regex分割">使用regex分割</h1>
+<p>类似python中split的功能使用正则表达式对字符串进行分割，但当前(c++11,c++14,c++17)并没有提供相应的分割功能。<br>
+在stackoverflow中也有<a href="https://stackoverflow.com/questions/16749069/c-split-string-by-regex/16752826">讨论</a>，并给出了一些解决方案，但是在<a href="http://www.cplusplus.com/reference/regex/regex_token_iterator/regex_token_iterator/">cppreference</a>中给出的方案应该是最好的，即使用<code>regex_token_iterator&lt;std::string::iterator&gt;</code>进行迭代。<br>
+具体代码如下：</p>
+<pre><code class="language-c++">// regex_token_iterator example
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;regex&gt;
+
+int main ()
+{
+  std::string s (&quot;this subject has a submarine as a subsequence&quot;);
+  std::regex e (&quot;\\b(sub)([^ ]*)&quot;);   // matches words beginning by &quot;sub&quot;
+
+  // default constructor = end-of-sequence:
+  std::regex_token_iterator&lt;std::string::iterator&gt; rend;
+
+  std::cout &lt;&lt; &quot;entire matches:&quot;; 
+  std::regex_token_iterator&lt;std::string::iterator&gt; a ( s.begin(), s.end(), e );
+  while (a!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *a++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;2nd submatches:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; b ( s.begin(), s.end(), e, 2 );
+  while (b!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *b++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;1st and 2nd submatches:&quot;;
+  int submatches[] = { 1, 2 };
+  std::regex_token_iterator&lt;std::string::iterator&gt; c ( s.begin(), s.end(), e, submatches );
+  while (c!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *c++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;matches as splitters:&quot;;
+  std::regex_token_iterator&lt;std::string::iterator&gt; d ( s.begin(), s.end(), e, -1 );
+  while (d!=rend) std::cout &lt;&lt; &quot; [&quot; &lt;&lt; *d++ &lt;&lt; &quot;]&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</code></pre>
+<p>注意<code>regex_token_iterator&lt;std::string::iterator&gt;</code>构造函数的第三个参数的意义。<br>
+output</p>
+<pre><code>entire amtches: [subject] [submarine] [subsequence]
+2nd submatches: [ject] [marine] [sequence]
+1st and 2nd submatches: [sub] [ject] [sub] [marine] [sub] [sequence]
+matches as splitters: [this ] [ has a ] [ as a ]
+</code></pre>
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+<!-- more -->
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[c++ string format]]></title>
         <id>https://armslave7.github.io/post/c-string-format/</id>
