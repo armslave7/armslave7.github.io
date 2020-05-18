@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-05-16T15:36:54.074Z</updated>
+    <updated>2020-05-18T05:42:46.025Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -10,6 +10,23 @@
     <logo>https://armslave7.github.io/images/avatar.png</logo>
     <icon>https://armslave7.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[windows下因资源占用无法移动文件]]></title>
+        <id>https://armslave7.github.io/post/windows-xia-yin-zi-yuan-zhan-yong-wu-fa-yi-dong-wen-jian/</id>
+        <link href="https://armslave7.github.io/post/windows-xia-yin-zi-yuan-zhan-yong-wu-fa-yi-dong-wen-jian/">
+        </link>
+        <updated>2020-05-18T05:42:26.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="在windows下删除或者移动某个文件或文件夹有时会遇到操作无法完成因为其中的文件夹或文件已在另一个程序中打开">在windows下删除或者移动某个文件或文件夹有时会遇到“操作无法完成，因为其中的文件夹或文件已在另一个程序中打开。”</h2>
+<p>这是因为要操作的文件或者文件夹中包含的文件以及被占用，或者被其它程序打开，或者没有被正常关闭，导致windows中文件句柄还在，也就是被占用了</p>
+<p>解决办法</p>
+<ol>
+<li>打开资源管理器，打开资源监视器</li>
+<li>切换到cpu栏，在关联的句柄中搜索响应的文件，或者路径即可找到占用该资源的程序</li>
+<li>解释该进程即可</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/armslave7/armslave7.github.io/master/images/upload_img/20200518133819.png" alt="搜索句柄" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[learn git]]></title>
         <id>https://armslave7.github.io/post/learn-git/</id>

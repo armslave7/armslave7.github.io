@@ -1,8 +1,8 @@
 <html>
   <head>
-  <meta charset="utf-8" />
+    <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>tools | songt&#39;s blog</title>
+<title>windows下因资源占用无法移动文件 | songt&#39;s blog</title>
 <meta name="description" content="ING" />
 <link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1589780564255">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -70,92 +70,60 @@
   </div>
 </div>
 
-        <div class="current-tag-container">
-            <h2 class="title">
-                标签：# tools
-            </h2> 
-        </div>
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://armslave7.github.io/post/window-xia-ssh-yi-ji-vscode-remotessh/">
-        <h2 class="post-title">window下ssh以及vscode-remotessh</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-16
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-          <a href="https://armslave7.github.io/tag/qgjvMU-u5/" class="post-tag">
-            # tools
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://armslave7.github.io/post/vscode-xiang-guan/">
-        <h2 class="post-title">vscode相关</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-04-30
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-          <a href="https://armslave7.github.io/tag/RQiP1kny-/" class="post-tag">
-            # c++
-          </a>
-        
-          <a href="https://armslave7.github.io/tag/qgjvMU-u5/" class="post-tag">
-            # tools
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://armslave7.github.io/post/xiao-gong-ju/">
-        <h2 class="post-title">小工具</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-04-26
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-          <a href="https://armslave7.github.io/tag/qgjvMU-u5/" class="post-tag">
-            # tools
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              windows下因资源占用无法移动文件
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-05-18
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="在windows下删除或者移动某个文件或文件夹有时会遇到操作无法完成因为其中的文件夹或文件已在另一个程序中打开">在windows下删除或者移动某个文件或文件夹有时会遇到“操作无法完成，因为其中的文件夹或文件已在另一个程序中打开。”</h2>
+<p>这是因为要操作的文件或者文件夹中包含的文件以及被占用，或者被其它程序打开，或者没有被正常关闭，导致windows中文件句柄还在，也就是被占用了</p>
+<p>解决办法</p>
+<ol>
+<li>打开资源管理器，打开资源监视器</li>
+<li>切换到cpu栏，在关联的句柄中搜索响应的文件，或者路径即可找到占用该资源的程序</li>
+<li>解释该进程即可</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/armslave7/armslave7.github.io/master/images/upload_img/20200518133819.png" alt="搜索句柄" loading="lazy"></figure>
 
-        <div class="pagination-container">
-  
-  
-</div>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%9C%A8windows%E4%B8%8B%E5%88%A0%E9%99%A4%E6%88%96%E8%80%85%E7%A7%BB%E5%8A%A8%E6%9F%90%E4%B8%AA%E6%96%87%E4%BB%B6%E6%88%96%E6%96%87%E4%BB%B6%E5%A4%B9%E6%9C%89%E6%97%B6%E4%BC%9A%E9%81%87%E5%88%B0%E6%93%8D%E4%BD%9C%E6%97%A0%E6%B3%95%E5%AE%8C%E6%88%90%E5%9B%A0%E4%B8%BA%E5%85%B6%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E6%88%96%E6%96%87%E4%BB%B6%E5%B7%B2%E5%9C%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E4%B8%AD%E6%89%93%E5%BC%80">在windows下删除或者移动某个文件或文件夹有时会遇到“操作无法完成，因为其中的文件夹或文件已在另一个程序中打开。”</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://armslave7.github.io/post/learn-git/">
+              <h3 class="post-title">
+                learn git
+              </h3>
+            </a>
+          </div>
+        
+
+        
 
         <div class="site-footer">
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
