@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://armslave7.github.io</id>
     <title>songt&apos;s blog</title>
-    <updated>2020-05-18T05:42:46.025Z</updated>
+    <updated>2020-05-19T08:43:59.670Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://armslave7.github.io"/>
     <link rel="self" href="https://armslave7.github.io/atom.xml"/>
@@ -10,6 +10,208 @@
     <logo>https://armslave7.github.io/images/avatar.png</logo>
     <icon>https://armslave7.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, songt&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[c++中的bind和find]]></title>
+        <id>https://armslave7.github.io/post/czhong-de-bind-he-find/</id>
+        <link href="https://armslave7.github.io/post/czhong-de-bind-he-find/">
+        </link>
+        <updated>2020-05-19T08:42:59.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="c-find">c++ find</h2>
+<p>在使用vector等容器时，尽量使用stl中提供的算法和方式来操作<br>
+例如查找vector中的元素，并获得其元素所在容器中的位置。</p>
+<pre><code class="language-c++">#include &lt;iostream&gt;     // std::cout
+#include &lt;algorithm&gt;    // std::find
+#include &lt;vector&gt;       // std::vector
+
+int main () {
+  // using std::find with array and pointer:
+  int myints[] = { 10, 20, 30, 40 };
+  int * p;
+  p = std::find (myints, myints+4, 30);
+  if (p != myints+4)
+    std::cout &lt;&lt; &quot;Element found in myints: &quot; &lt;&lt; *p &lt;&lt; '\n';
+  else
+    std::cout &lt;&lt; &quot;Element not found in myints\n&quot;;
+  // using std::find with vector and iterator:
+  std::vector&lt;int&gt; myvector (myints,myints+4);
+  std::vector&lt;int&gt;::iterator it;
+
+  it = find (myvector.begin(), myvector.end(), 30);
+  if (it != myvector.end())
+    std::cout &lt;&lt; &quot;Element found in myvector: &quot; &lt;&lt; *it &lt;&lt; '\n';
+  else
+    std::cout &lt;&lt; &quot;Element not found in myvector\n&quot;;
+
+  return 0;
+}
+</code></pre>
+<p>该例子是<a href="http://www.cplusplus.com/reference/algorithm/find/">cppreference</a>中提供的，对数组和容器均可使用find，从文档中可以发现只要可以实行++运算即可，所以容器和数值，迭代器均可。<br>
+并且可以使用<a href="http://www.cplusplus.com/reference/iterator/distance/?kw=distance">std::distance</a>获取元素所在容器中的位置。</p>
+<pre><code class="language-c++">#include &lt;iterator&gt;     // std::distance
+int nPos = std::distance(myvector.begin(),it);
+cout&lt;&lt;&quot;element is:&quot;&lt;&lt;myvector[nPose]&lt;&lt;endl;
+</code></pre>
+<p>需要注意的是，返回的distance可以直接访问到元素，如果distance第二个参数传入end，那么返回容器中元素的个数。</p>
+<h2 id="c-find_if">c++ find_if</h2>
+<p>更通用的做法是使用<a href="http://www.cplusplus.com/reference/algorithm/find_if/">find_if</a>，其第三个参数为UnaryPredicate pred，unary函数，接收一个参数作为输入，返回bool类型，有许多可选方式实现：</p>
+<ol>
+<li>普通函数，接收一个参数，返回bool</li>
+<li>可调用对象</li>
+<li>lambda函数</li>
+<li>std::bind</li>
+</ol>
+<h4 id="普通函数">普通函数</h4>
+<pre><code class="language-c++">#include &lt;iostream&gt;     // std::cout
+#include &lt;algorithm&gt;    // std::find_if
+#include &lt;vector&gt;       // std::vector
+bool IsOdd (int i) {
+  return ((i%2)==1);
+}
+int main () {
+  std::vector&lt;int&gt; myvector;
+  myvector.push_back(10);
+  myvector.push_back(25);
+  myvector.push_back(40);
+  myvector.push_back(55);
+  std::vector&lt;int&gt;::iterator it = std::find_if (myvector.begin(), myvector.end(), IsOdd);
+  std::cout &lt;&lt; &quot;The first odd value is &quot; &lt;&lt; *it &lt;&lt; '\n';
+  return 0;
+}
+</code></pre>
+<p>IsOdd函数接收int作为参数，返回bool，所以可以作为find_if的第三个参数。</p>
+<p>一般的，当find_if中传入的函数，可能有多个参数，并且需要动态决定其他参数的值时，单独使用普通函数是不能完成任务的，需要使用以下几种方法。</p>
+<h4 id="可调用对象">可调用对象</h4>
+<pre><code class="language-c++">#include &lt;iostream&gt;  // std::cout
+#include &lt;algorithm&gt; // std::find_if
+#include &lt;vector&gt;    // std::vector
+#include &lt;math.h&gt;
+#include &lt;functional&gt;
+class A
+{
+public:
+    A(double a)
+        : _d(a)
+    {
+    }
+    bool operator()(double d)
+    {
+        return abs(d - _d) &lt; pow(10, -20);
+    }
+private:
+    double _d;
+};
+int main()
+{
+    std::vector&lt;double&gt; myvector;
+
+    myvector.push_back(10);
+    myvector.push_back(25);
+    myvector.push_back(40);
+    myvector.push_back(55);
+    double ele = 40.0;
+    A a(ele);
+    auto it1 = std::find_if(myvector.begin(), myvector.end(), a);
+    if(it1!=myvector.end())
+        std::cout &lt;&lt; &quot;Element found  &quot; &lt;&lt; *it1 &lt;&lt; '\n';
+    else
+        std::cout&lt;&lt; &quot;Element&quot;&lt;&lt;ele&lt;&lt;&quot;not find.&quot;&lt;&lt;std::endl;
+    return 0;
+}
+</code></pre>
+<p>类实现操作符operator()即可。生成的实例即可使用小括号调用相应函数，类中可以保存变量，即可使得多个参数中其余参数固定。</p>
+<h3 id="lambda函数">lambda函数</h3>
+<pre><code class="language-c++">#include &lt;iostream&gt;  // std::cout
+#include &lt;algorithm&gt; // std::find_if
+#include &lt;vector&gt;    // std::vector
+#include &lt;math.h&gt;
+#include &lt;functional&gt;
+bool IsEqual(double a, double b)
+{
+    return (abs(a - b) &lt;= pow(10, -20));
+}
+int main()
+{
+    std::vector&lt;double&gt; myvector;
+
+    myvector.push_back(10);
+    myvector.push_back(25);
+    myvector.push_back(40);
+    myvector.push_back(55);
+    double ele = 40.0;
+    A a(ele);
+    auto it = std::find_if (myvector.begin(), myvector.end(), [ele](double a)-&gt;bool {return IsEqual(a,ele);});
+    if(it!=myvector.end())
+        std::cout &lt;&lt; &quot;Element found  &quot; &lt;&lt; *it &lt;&lt; '\n';
+    else
+        std::cout&lt;&lt; &quot;Element&quot;&lt;&lt;ele&lt;&lt;&quot;not find.&quot;&lt;&lt;std::endl;
+    return 0;
+}
+</code></pre>
+<p>关于lambda函数可以参考内容较多，此处简单说明，方括号[]中即为传递到函数内部的参数，此处为ele，即在lambda内部ele可见，小括号中为传入参数，-&gt;指明函数返回类型，此处为bool，花括号中为函数体，此处调用了另外一个函数IsEqual。</p>
+<h3 id="stdbind">std::bind</h3>
+<pre><code class="language-c++">#include &lt;iostream&gt;  // std::cout
+#include &lt;algorithm&gt; // std::find_if
+#include &lt;vector&gt;    // std::vector
+#include &lt;math.h&gt;
+#include &lt;functional&gt;
+bool IsEqual(double a, double b)
+{
+    return (abs(a - b) &lt;= pow(10, -20));
+}
+int main()
+{
+    std::vector&lt;double&gt; myvector;
+    myvector.push_back(10);
+    myvector.push_back(25);
+    myvector.push_back(40);
+    myvector.push_back(55);
+    double ele = 40.0;
+    auto p = std::bind(IsEqual, std::placeholders::_1, ele);
+    auto it = std::find_if(myvector.begin(), myvector.end(), p);
+    if(it!=myvector.end())
+        std::cout &lt;&lt; &quot;Element found  &quot; &lt;&lt; *it &lt;&lt; '\n';
+    else
+        std::cout&lt;&lt; &quot;Element&quot;&lt;&lt;ele&lt;&lt;&quot;not find.&quot;&lt;&lt;std::endl;
+    return 0;
+}
+</code></pre>
+<p>使用std::bind之后，函数中的第二个参数被绑定为ele，新的函数名为p，即可以使用p(double),等价于调用IsEqual(double,ele)。</p>
+<h2 id="stdplaceholders">std::placeholders</h2>
+<p>std::placeholders用于调整std::bind中参数的顺序。</p>
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;functional&gt;
+bool TestHolder(int a, int b, int c)
+{
+    std::cout &lt;&lt; &quot;No1:&quot; &lt;&lt; a &lt;&lt; std::endl
+              &lt;&lt; &quot;No2:&quot; &lt;&lt; b &lt;&lt; std::endl
+              &lt;&lt; &quot;No3:&quot; &lt;&lt; c &lt;&lt; std::endl;
+    return true;
+}
+int main()
+{
+    auto p1 = std::bind(TestHolder, std::placeholders::_3, std::placeholders::_2, std::placeholders::_1);
+    p1(1,2,3);
+    return 0;
+}
+</code></pre>
+<p>输出为</p>
+<pre><code>No1:3
+No2:2
+No3:1
+</code></pre>
+<p>placeholders::_n指的是bind后可调用函数的第n个参数，p1(1,2,3)中即为 <code>_3:3,_2:2,_1:1</code>，传入TestHolder时相当于<code>TestHolder(_3,_2,_1)</code>。<br>
+再举一个例子</p>
+<pre><code class="language-c++">auto p1 = std::bind(TestHolder, 200, std::placeholders::_2, std::placeholders::_1);
+p1(1,2);
+</code></pre>
+<p>输出为</p>
+<pre><code>No1:200
+No2:2
+No3:1
+</code></pre>
+<p>此处200为固定值，<code>_2:2;_1:1</code>所以相当于调用<code>TestHolder(200,_2,_1)</code>。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[windows下因资源占用无法移动文件]]></title>
         <id>https://armslave7.github.io/post/windows-xia-yin-zi-yuan-zhan-yong-wu-fa-yi-dong-wen-jian/</id>
