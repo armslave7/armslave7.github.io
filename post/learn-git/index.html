@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>learn git | songt&#39;s blog</title>
 <meta name="description" content="ING" />
-<link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1589877837257">
+<link rel="shortcut icon" href="https://armslave7.github.io/favicon.ico?v=1589879605069">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://armslave7.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://armslave7.github.io">
-  <img class="avatar" src="https://armslave7.github.io/images/avatar.png?v=1589877837257" alt="">
+  <img class="avatar" src="https://armslave7.github.io/images/avatar.png?v=1589879605069" alt="">
   </a>
   <h1 class="site-title">
     songt&#39;s blog
@@ -91,13 +91,24 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="拉取指定版本代码">拉取指定版本代码</h1>
+                <h2 id="拉取指定版本代码">拉取指定版本代码</h2>
 <p>git clone --branch version.num repo.location</p>
+<h2 id="获取远程分支并创建本地分支进行跟踪">获取远程分支并创建本地分支进行跟踪</h2>
+<pre><code class="language-bash">git fetch # 同步本地的origin与远程的origin
+git checkout -b dev origin/dev #假设远程origin上有dev分支，该命令在本地创建dev分支，并跟踪origin/dev分支
+#或者使用
+git branch --track dev origin/dev
+</code></pre>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
+<li>
+<ul>
 <li><a href="#%E6%8B%89%E5%8F%96%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC%E4%BB%A3%E7%A0%81">拉取指定版本代码</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E5%B9%B6%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF%E8%BF%9B%E8%A1%8C%E8%B7%9F%E8%B8%AA">获取远程分支并创建本地分支进行跟踪</a></li>
+</ul>
+</li>
 </ul>
 
               </div>
